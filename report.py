@@ -4,7 +4,7 @@ import json
 import shutil
 import pprint
 from datetime import datetime
-
+import subprocess
 class Report():
     
     def __init__(self):
@@ -61,7 +61,7 @@ class Report():
     
     #Método para generar el reporte de análisis de eventos
     def event_analysis(self, mission_data):
-        df = pd.json_normalize(mission_data)
+        df = pd.DataFrame(mission_data)
         data = df.groupby(['mission', 'device_type', 'device_status']).size().reset_index(name='count')
         return data
     
@@ -75,6 +75,29 @@ class Report():
                     print("Se han movido los archivos exitosamente")
                 except:
                     print(f"No fue posible mover el archivo {file}")
+                    
+    #Método para generar el reporte consolidación de misiones
+    def killed_devices(self, mission_data):
+        try:
+            df = pd.DataFrame(mission_data)
+            #filtra las filas donde el estado es 'killed'
+            devices = df[df['device_status'] == 'killed']
+            #agrupa por misión y cuenta la cantidad de dispositivos 'killed'
+            data = devices.groupby('mission')['device_status'].count().reset_index(name='killed_devices_count')
+            return data
+        except:
+            print("Ha ocurrido un error al realizar el reporte de dispositivos inoperables")
+    
+    def percentage_calculation(self, mission_data):
+        try:
+            df = pd.DataFrame(mission_data)
+            total_data = len(df)
+            grouped_data = df.groupby(['mission', 'device_type']).size().reset_index(name='data_count')
+            grouped_data['percentage'] = (grouped_data['data_count'] / total_data) * 100
+            return grouped_data
+            
+        except:
+            print("Ha ocurrido un error al realizar el reporte de dispositivos inoperables")
 
 #DATA PARA PRUEBAS
 """move_to_backup(["testfile.txt"
@@ -84,13 +107,10 @@ class Report():
 ,"APLCLNM-0004.log" 
 ,"APLCLNM-0005.log"])"""
 
-#Método para generar el reporte consolidación de misiones
-def killed_devices(mission_data):
-    df = pd.json_normalize(mission_data)
-    print(df.groupby(['mission', 'device_type']).filter(lambda x: set(x['device_status'])=='killed'))
-    #print(df[df['device_status']=="killed"])
 
-"""killed_devices([{'date': '21-12-2023',
+
+
+data_prueba = [{'date': '21-12-2023',
   'device_status': 'warning',
   'device_type': 'Satelite',
   'hash': 'XXX',
@@ -129,55 +149,28 @@ def killed_devices(mission_data):
   'device_status': 'excellent',
   'device_type': 'Satelite',
   'hash': 'XXX',
-  'mission': 'OrbitOne'}])"""
+  'mission': 'OrbitOne'}]
 
-fecha = datetime.now().strftime("%d%m%Y%H%M%S")
+fecha = datetime.now().strftime("%d%m%y%H%M%S")
 print(fecha)
 #Método para crear el reporte
 rp = Report()
 def create_report():
     file_name = f'APLSTATS-CICLO_1-{fecha}.log'
     with open(file_name,'a') as file:
-        data = rp.event_analysis([{'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Traje espacial',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'faulty',
-  'device_type': 'Traje espacial',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'killed',
-  'device_type': 'Traje espacial',
-  'hash': 'XXX',
-  'mission': 'GalaxyTwo'},
- {'date': '21-12-2023',
-  'device_status': 'killed',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'GalaxyTwo'},
- {'date': '21-12-2023',
-  'device_status': 'excellent',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'OrbitOne'}])
-        file.write(data.to_string())
+        event_analysis = rp.event_analysis(data_prueba)
+        print(f"La variable {event_analysis} es de tipo {type(event_analysis)}")
+        killed_devices = rp.killed_devices(data_prueba)
+        print(f"La variable {killed_devices} es de tipo {type(killed_devices)}")
+        percentage_calculation = rp.percentage_calculation(data_prueba)
+        print(f"La variable {percentage_calculation} es de tipo {type(percentage_calculation)}")
+        
+        file.write("Analisis de eventos")
+        file.write("\n\n"+event_analysis.to_string())
+        file.write("\n\nConsolidacion de misiones")
+        file.write("\n\n"+killed_devices.to_string(index=False))
+        file.write("\n\nCalculo de porcentajes")
+        file.write("\n\n"+percentage_calculation.to_string(index=False))
+        os.startfile(os.path.join(file_name))
 
 create_report()
