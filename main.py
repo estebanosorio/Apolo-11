@@ -2,7 +2,7 @@ import os
 import random
 import time
 from datetime import datetime
-
+#
 class FileGenerator:
     def __init__(self, base_path):
         self.base_path = base_path
@@ -53,8 +53,9 @@ class FileGenerator:
             self.generate_file(mission)
 
 if __name__ == "__main__":
-    base_path = r"C:\Users\004076661\Documents\Bootcamp\Apolo11"
+    base_path = os.path.dirname("main.py")#r"C:\Users\004076661\Documents\Bootcamp\Apolo11"
     generator = FileGenerator(base_path)
+    print (base_path)
     generator.create_folder()
 
     num_files = int(input("Ingrese la cantidad de archivos a crear: "))
