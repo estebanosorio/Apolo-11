@@ -173,4 +173,4 @@ def create_report():
         file.write("\n\n"+percentage_calculation.to_string(index=False))
         os.startfile(os.path.join(file_name))
 
-create_report()
+#create_report()
