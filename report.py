@@ -159,11 +159,8 @@ def create_report():
     file_name = f'APLSTATS-CICLO_1-{fecha}.log'
     with open(file_name,'a') as file:
         event_analysis = rp.event_analysis(data_prueba)
-        print(f"La variable {event_analysis} es de tipo {type(event_analysis)}")
         killed_devices = rp.killed_devices(data_prueba)
-        print(f"La variable {killed_devices} es de tipo {type(killed_devices)}")
         percentage_calculation = rp.percentage_calculation(data_prueba)
-        print(f"La variable {percentage_calculation} es de tipo {type(percentage_calculation)}")
         
         file.write("Analisis de eventos")
         file.write("\n\n"+event_analysis.to_string())
@@ -172,5 +169,4 @@ def create_report():
         file.write("\n\nCalculo de porcentajes")
         file.write("\n\n"+percentage_calculation.to_string(index=False))
         os.startfile(os.path.join(file_name))
-
 create_report()
