@@ -2,6 +2,7 @@ import os
 import random
 import time
 from datetime import datetime
+from generate_hash import Hash
 
 class FileGenerator:
     def __init__(self, base_path):
@@ -26,11 +27,12 @@ class FileGenerator:
         return f"APL{mission}-{consecutive_number}.log"
 
     def generate_file_content(self, mission):
+        hash = Hash()
         current_date = datetime.now().strftime("%d-%m-%Y")
         device_type = random.choice(self.device_types)
         device_status = random.choice(self.device_statuses)
-        hash_value = "XXX"  # You can replace this with your actual hash generation logic
-
+        hash_value = hash.generate_hash(current_date, mission, device_type, device_status)  # You can replace this with your actual hash generation logic
+    
         return {
             "date": current_date,
             "mission": mission,
@@ -38,7 +40,7 @@ class FileGenerator:
             "device_status": device_status.lower(),
             "hash": hash_value
         }
-
+    
     def generate_file(self, mission):
         filename = self.generate_filename(mission)
         file_content = self.generate_file_content(mission)
@@ -67,3 +69,4 @@ if __name__ == "__main__":
             time.sleep(interval_seconds)
     except KeyboardInterrupt:
         print("\nProceso interrumpido por el usuario.")
+        

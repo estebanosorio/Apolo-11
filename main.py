@@ -14,11 +14,11 @@ rp = Report()
 
 while True:
     option = input("""
-                   APOLO 11
-                   Elija una opcion
-                   1. Iniciar simulacion
-                   2. Generar reportes
-                   3. Salir\n""")
+                APOLO 11
+                Elija una opcion
+                1. Iniciar simulacion
+                2. Generar reportes
+                3. Salir\n""")
     match option:
         case '1':
             pass
