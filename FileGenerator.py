@@ -1,11 +1,7 @@
 import os
 import random
 from datetime import datetime
-<<<<<<< HEAD:main1.py
 from generate_hash import Hash
-
-=======
->>>>>>> main:FileGenerator.py
 class FileGenerator:
     def __init__(self, base_path):
         self.base_path = base_path
@@ -65,16 +61,6 @@ class FileGenerator:
 #     num_files = int(input("Ingrese la cantidad de archivos a crear: "))
 #     interval_seconds = int(input("Ingrese cada cuántos segundos desea ejecutar la creación de archivos: "))
 
-<<<<<<< HEAD:main1.py
-    try:
-        while True:
-            generator.generate_files(num_files)
-            print(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
-            time.sleep(interval_seconds)
-    except KeyboardInterrupt:
-        print("\nProceso interrumpido por el usuario.")
-        
-=======
 #     try:
 #         while True:
 #             generator.generate_files(num_files)
@@ -82,4 +68,3 @@ class FileGenerator:
 #             time.sleep(interval_seconds)
 #     except KeyboardInterrupt:
 #         print("\nProceso interrumpido por el usuario.")
->>>>>>> main:FileGenerator.py
