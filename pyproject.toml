@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "apolo-11"
+version = "0.1.0"
+description = "Este es un proyecto destinado a practicas y simulacion de archivos y monitor de informes de los archivos generados."
+authors = ["Kevin Torres <kevin.tm200@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^2.2.0"
+flake8 = "^7.0.0"
+keyboard = "^0.13.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
