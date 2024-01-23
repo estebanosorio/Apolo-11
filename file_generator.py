@@ -40,9 +40,9 @@ class FileGenerator:
         }
     
     def generate_file(self, mission):
-        filename = self.generate_filename(mission)
+        file_name = self.generate_filename(mission)
         file_content = self.generate_file_content(mission)
-        file_path = os.path.join(self.base_path, "devices", filename)
+        file_path = os.path.join(self.base_path, "devices", file_name)
 
         with open(file_path, "w") as file:
             file.write(str(file_content))

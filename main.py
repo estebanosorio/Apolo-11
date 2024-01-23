@@ -1,18 +1,17 @@
 import keyboard
-import FileGenerator 
+import file_generator 
 import time
 from datetime import datetime
 import json
 import random
-#import report
 
 if __name__ == "__main__":
-    vlr=int(input("1) Generador de Archivos:\n 2) Reportes"))
-    if(vlr == 1 ):
+    vlr = int(input("1) Generador de Archivos:\n 2) Reportes"))
+    if  ( vlr == 1 ):
         with open("parameters.json", "r") as parameters:
             parameter = json.load(parameters)
-        base_path = FileGenerator.os.path.dirname("main.py")
-        generator = FileGenerator.FileGenerator(base_path)
+        basepath = file_generator.os.path.dirname("main.py")
+        generator = file_generator.FileGenerator(basepath)
         generator.create_folder()
 
         print(parameter)
