@@ -1,7 +1,11 @@
 import os
 import random
+import time
+import file_generator 
+import json
 from datetime import datetime
 from generate_hash import Hash
+
 class FileGenerator:
     def __init__(self, base_path):
         self.base_path = base_path
@@ -40,9 +44,9 @@ class FileGenerator:
         }
     
     def generate_file(self, mission):
-        filename = self.generate_filename(mission)
+        file_name = self.generate_filename(mission)
         file_content = self.generate_file_content(mission)
-        file_path = os.path.join(self.base_path, "devices", filename)
+        file_path = os.path.join(self.base_path, "devices", file_name)
 
         with open(file_path, "w") as file:
             file.write(str(file_content))
@@ -51,20 +55,3 @@ class FileGenerator:
         for _ in range(num_files):
             mission = random.choice(self.missions)
             self.generate_file(mission)
-
-# if __name__ == "__main__":
-#     base_path = os.path.dirname("main.py")
-#     generator = FileGenerator(base_path)
-#     print (base_path)
-#     generator.create_folder()
-
-#     num_files = int(input("Ingrese la cantidad de archivos a crear: "))
-#     interval_seconds = int(input("Ingrese cada cuántos segundos desea ejecutar la creación de archivos: "))
-
-#     try:
-#         while True:
-#             generator.generate_files(num_files)
-#             print(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
-#             time.sleep(interval_seconds)
-#     except KeyboardInterrupt:
-#         print("\nProceso interrumpido por el usuario.")

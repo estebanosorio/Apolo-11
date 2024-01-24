@@ -2,9 +2,7 @@ import pandas as pd
 import os
 import json
 import shutil
-import pprint
 from datetime import datetime
-import subprocess
 class Report():
     
     def __init__(self):

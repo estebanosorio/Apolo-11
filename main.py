@@ -1,38 +1,45 @@
-import keyboard
-import FileGenerator 
+import file_generator 
 import time
+import report
 from datetime import datetime
 import json
 import random
-#import report
 
-if __name__ == "__main__":
-    vlr=int(input("1) Generador de Archivos:\n 2) Reportes"))
-    if(vlr == 1 ):
+
+
+def mostrar_menu():
+    print("Elige una opción:")
+    print("1) Generar archivos ")
+    print("2) Generar Reporte")
+    print("3) Salir")
+
+seguir = True
+
+while seguir:
+    mostrar_menu()
+    opcion = int(input("¿Que quieres hacer? : "))
+    if (opcion == 1):
         with open("parameters.json", "r") as parameters:
             parameter = json.load(parameters)
-        base_path = FileGenerator.os.path.dirname("main.py")
-        generator = FileGenerator.FileGenerator(base_path)
+        basepath = file_generator.os.path.dirname("main.py")
+        generator = file_generator.FileGenerator(basepath)
         generator.create_folder()
-
-        print(parameter)
-        num_files = random.randint(parameter["fileMin"],parameter["fileMax"])
+        num_files = random.randint(parameter["file_min"],parameter["file_max"])
         interval_seconds = parameter["interval_seconds"]
-        print(num_files)
+        print("Archivos a generar ",num_files)
+        print("Cada ", interval_seconds ," Segundos")
         try:
             while True:
                 generator.generate_files(num_files)
                 print(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
                 time.sleep(interval_seconds)
-                if keyboard.is_pressed('a'):
-                    
-                    break
+                
         except:
-            print("\nProceso interrumpido por el usuario.")
-    
-    # else:
-    #     if(vlr == 2):
-    #         report.create_report()
-
-        
-
+            print("\nTermino el tiempo de creacion de archivos")
+    if (opcion == 2):
+        x= report.create_report()
+    if (opcion == 3):
+        print("Adiós")
+        seguir = False
+    else: 
+        print("Opcion Invalida")
