@@ -2,7 +2,10 @@ import file_generator
 import report
 
 
-def mostrar_menu():
+def mostrar_menu() -> None:
+    '''
+    Muestra el menu de opciones al usuario
+    '''
     print("Elige una opción:")
     print("1) Generar archivos ")
     print("2) Generar Reporte")
@@ -12,10 +15,10 @@ seguir = True
 
 while seguir:
     mostrar_menu()
-    opcion = int(input("¿Que quieres hacer? : "))
+    opcion: int = int(input("¿Que quieres hacer? : "))
     if (opcion == 1):
-        basepath = file_generator.os.path.dirname("main.py")
-        generator = file_generator.FileGenerator(basepath)
+        basepath: str = file_generator.os.path.dirname("main.py")
+        generator: file_generator.FileGenerator = file_generator.FileGenerator(basepath)
         generator.create_folder()
         generator.run_file_generation()
 
