@@ -1,3 +1,5 @@
+import file_generator
+import time
 import file_generator 
 import report
 
