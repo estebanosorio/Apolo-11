@@ -1,7 +1,6 @@
 import os
 import random
 import time
-import file_generator 
 import json
 from datetime import datetime
 from generate_hash import Hash
@@ -55,3 +54,20 @@ class FileGenerator:
         for _ in range(num_files):
             mission = random.choice(self.missions)
             self.generate_file(mission)
+
+    def run_file_generation(self):
+        with open("parameters.json", "r") as parameters:
+            parameter = json.load(parameters)
+
+        num_files = random.randint(parameter["file_min"], parameter["file_max"])
+        interval_seconds = parameter["interval_seconds"]
+
+        try:
+            while True:
+                self.generate_files(num_files)
+                print(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
+                time.sleep(interval_seconds)
+                
+        except:
+            print("\nTermino el tiempo de creacion de archivos")
+            
