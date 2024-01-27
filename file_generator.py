@@ -60,12 +60,20 @@ class FileGenerator:
             parameter: Dict[str, int] = json.load(parameters)
 
         num_files: int = random.randint(parameter["file_min"], parameter["file_max"])
+    
         interval_seconds: int = parameter["interval_seconds"]
+
+        print("El numero de archivos a generar es:", num_files)
+        print("el tiempo intervalo para la sigueinte creacion es:",interval_seconds)
+
 
         try:
             while True:
                 self.generate_files(num_files)
                 print(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
                 time.sleep(interval_seconds)
+                num_files: int = random.randint(parameter["file_min"], parameter["file_max"])
+                print("El número de archivos a generar es:", num_files)
+                print("El tiempo de intervalo para la siguiente creación es:", interval_seconds)
         except:
             print("\nTermino el tiempo de creacion de archivos")

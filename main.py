@@ -1,5 +1,3 @@
-import file_generator
-import time
 import file_generator 
 import report
 
@@ -26,6 +24,7 @@ while seguir:
 
     if (opcion == 2):
         x= report.create_report()
+
         
     if (opcion == 3):
         print("Adiós")
