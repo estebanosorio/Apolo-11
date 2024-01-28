@@ -46,7 +46,23 @@ class Report():
                     discarded_files.append(preview)
                     print(f'Ha ocurrido un error inesperado {e}')
         return missions_data
-
+    
+    # Método para buscar el número de la última ejecución y devolver el nombre de la proxima carpeta execution
+    def search_execution (self) -> str:
+        try:
+            if os.path.exists(os.path.join("backup/")):
+                list_dir = os.listdir(os.path.join("backup/"))
+                list_aux: list = []
+                if list_dir != []:
+                    for item in list_dir:
+                        list_aux.append(int(item.split("_")[1]))
+                    list_aux.sort()
+                    return("execution_"+str(list_aux[-1]+1))
+                else:
+                    return("execution_1")
+        except Exception as e:
+            return(f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta backup {e}")
+    
     # Se debe mejorar con el fin de que se cree una carpeta del ciclo de ejecución con base en la última existente
     def verify_backup(self) -> bool:
         print("entro a verify backup")
@@ -61,23 +77,24 @@ class Report():
 
     # Crear función para validar la estrucutura de cada diccionario
 
+    # Método para mover los archivos al backup
+    # Se debe mejorar para que se guarden en la carpeta del ciclo indicado
+    def move_to_backup(self, list_files: list) -> None:
+        if self.verify_backup():
+            next_dir = self.search_execution()
+            os.mkdir("backup/"+next_dir)
+            for file in list_files:
+                try:
+                    shutil.move("devices/"+file, "backup/"+next_dir+"/")
+                    print("Se han movido los archivos exitosamente")
+                except Exception as e:
+                    print(f"No fue posible mover el archivo {file} motivo {e}")
+
     # Método para generar el reporte de análisis de eventos
     def event_analysis(self, mission_data: list) -> pd.DataFrame:
         df: pd.DataFrame = pd.DataFrame(mission_data)
         data: pd.DataFrame = df.groupby(['mission', 'device_type', 'device_status']).size().reset_index(name='count')
         return data
-
-    # Método para mover los archivos al backup
-    # Se debe mejorar para que se guarden en la carpeta del ciclo indicado
-    def move_to_backup(self, list_files: list) -> None:
-        if self.verify_backup():
-            for file in list_files:
-                try:
-                    shutil.move("devices/"+file, "backup")
-                    print("Se han movido los archivos exitosamente")
-                except Exception as e:
-                    print(f"No fue posible mover el archivo {file} motivo {e}")
-
     # Método para generar el reporte consolidación de misiones
     def killed_devices(self, mission_data: list) -> pd.DataFrame:
         try:
@@ -105,78 +122,19 @@ class Report():
             grouped_data = pd.DataFrame()
             print(f"Ha ocurrido un error al realizar el reporte de dispositivos inoperables {e}")
             return grouped_data
-
-# DATA PARA PRUEBAS
-
-
-"""move_to_backup(["testfile.txt"
-,"APLCLNM-0006.log"
-,"APLCLNM-0002.log"
-,"APLCLNM-0003.log"
-,"APLCLNM-0004.log"
-,"APLCLNM-0005.log"])"""
-
-data_prueba = [{'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'warning',
-  'device_type': 'Traje espacial',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'faulty',
-  'device_type': 'Traje espacial',
-  'hash': 'XXX',
-  'mission': 'ColonyMoon'},
- {'date': '21-12-2023',
-  'device_status': 'killed',
-  'device_type': 'Traje espacial',
-  'hash': 'XXX',
-  'mission': 'GalaxyTwo'},
- {'date': '21-12-2023',
-  'device_status': 'killed',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'GalaxyTwo'},
- {'date': '21-12-2023',
-  'device_status': 'excellent',
-  'device_type': 'Satelite',
-  'hash': 'XXX',
-  'mission': 'OrbitOne'}]
-
-fecha = datetime.now().strftime("%d%m%y%H%M%S")
-print(fecha)
-# Método para crear el reporte
-rp = Report()
-def create_report():
     
-    
-    file_name = f'APLSTATS-CICLO_1-{fecha}.log'
-    with open(file_name, 'a') as file:
-        event_analysis = rp.event_analysis(data_prueba)
-        killed_devices = rp.killed_devices(data_prueba)
-        percentage_calculation = rp.percentage_calculation(data_prueba)
+    def create_report(self, data_prueba: list) -> None:
+        fecha = datetime.now().strftime("%d%m%y%H%M%S")
+        file_name = f'APLSTATS-{1}-{fecha}.log'
+        with open(file_name, 'a') as file:
+            event_analysis = self.event_analysis(data_prueba)
+            killed_devices = self.killed_devices(data_prueba)
+            percentage_calculation = self.percentage_calculation(data_prueba)
 
-        file.write("Analisis de eventos")
-        file.write("\n\n"+event_analysis.to_string())
-        file.write("\n\nConsolidacion de misiones")
-        file.write("\n\n"+killed_devices.to_string(index=False))
-        file.write("\n\nCalculo de porcentajes")
-        file.write("\n\n"+percentage_calculation.to_string(index=False))
-        os.startfile(os.path.join(file_name))
-
-
-create_report()
+            file.write("Analisis de eventos")
+            file.write("\n\n"+event_analysis.to_string())
+            file.write("\n\nConsolidacion de misiones")
+            file.write("\n\n"+killed_devices.to_string(index=False))
+            file.write("\n\nCalculo de porcentajes")
+            file.write("\n\n"+percentage_calculation.to_string(index=False))
+            os.startfile(os.path.join(file_name))

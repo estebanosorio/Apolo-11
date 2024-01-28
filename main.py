@@ -1,7 +1,7 @@
 import file_generator
 import time
 import file_generator 
-import report
+from report import Report
 
 
 def mostrar_menu():
@@ -11,7 +11,7 @@ def mostrar_menu():
     print("3) Salir")
 
 seguir = True
-
+rp = Report()
 while seguir:
     mostrar_menu()
     opcion = int(input("¿Que quieres hacer? : "))
@@ -22,7 +22,11 @@ while seguir:
         generator.run_file_generation()
 
     if (opcion == 2):
-        x= report.create_report()
+        if rp.verify_devices():
+                file_list = rp.get_file_list()
+                mission_data = rp.read_file(file_list)
+                rp.create_report(mission_data)
+                rp.move_to_backup(mission_data)
         
     if (opcion == 3):
         print("Adiós")
