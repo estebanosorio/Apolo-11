@@ -14,6 +14,7 @@ class Hash():
             device_type (str): Tipo de dispositivo
             device_status (str): Estado del dispositivo
 
+
         Returns:
             str: Retorna el hash code para cada archivo
         """
