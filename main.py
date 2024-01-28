@@ -1,10 +1,11 @@
-import file_generator
-import time
 import file_generator 
 from report import Report
 
 
-def mostrar_menu():
+def mostrar_menu() -> None:
+    '''
+    Muestra el menu de opciones al usuario
+    '''
     print("Elige una opción:")
     print("1) Generar archivos ")
     print("2) Generar Reporte")
@@ -14,10 +15,10 @@ seguir = True
 rp = Report()
 while seguir:
     mostrar_menu()
-    opcion = int(input("¿Que quieres hacer? : "))
+    opcion: int = int(input("¿Que quieres hacer? : "))
     if (opcion == 1):
-        basepath = file_generator.os.path.dirname("main.py")
-        generator = file_generator.FileGenerator(basepath)
+        basepath: str = file_generator.os.path.dirname("main.py")
+        generator: file_generator.FileGenerator = file_generator.FileGenerator(basepath)
         generator.create_folder()
         generator.run_file_generation()
 
@@ -26,8 +27,7 @@ while seguir:
                 file_list = rp.get_file_list()
                 mission_data = rp.read_file(file_list)
                 rp.create_report(mission_data)
-                rp.move_to_backup(mission_data)
-        
+                rp.move_to_backup(mission_data)        
     if (opcion == 3):
         print("Adiós")
         seguir = False
