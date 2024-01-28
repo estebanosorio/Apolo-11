@@ -7,11 +7,14 @@ from generate_hash import Hash
 from typing import List, Dict
 
 class FileGenerator:
+
     def __init__(self, base_path: str):
         self.base_path: str = base_path
-        self.missions: List[str] = ["ORBONE", "CLNM", "TMRS", "GALXONE", "UNKN"]
-        self.device_types: List[str] = ["satelite", "celular", "carro", "avion", "jet", "moto", "arma", "telefono", "traje", "casco", "pantalon_espacial"]
-        self.device_statuses: List[str] = ["EXCELLENT", "GOOD", "WARNING", "FAULTY", "KILLED", "UNKNOWN"]
+        with open("parameters.json", "r") as parameters_file:
+            parameters = json.load(parameters_file)
+            self.missions = parameters["missions"]
+            self.device_types = parameters["device_types"]
+            self.device_statuses = parameters["device_statuses"]
         self.consecutive_count: Dict[str, int] = {}
 
     def create_folder(self) -> None:
