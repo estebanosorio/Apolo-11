@@ -10,8 +10,12 @@ class Report():
     def __init__(self) -> None:
         pass
 
-    # método para verificar que exista la carpeta devices
     def verify_devices(self) -> bool:
+        """método para verificar que exista la carpeta devices
+        
+        :return: retorna la confirmación de la existencia de la carpeta devices
+        :rtype: bool
+        """
         try:
             if os.path.exists("devices/"):
                 print("Carpeta devices encontrada")
@@ -23,8 +27,12 @@ class Report():
             print(f"Ha ocurrido un error buscando la carpeta devices {e}")
             return False
 
-    # método para devolver la lista de archivos dentro de la carpeta devices
     def get_file_list(self) -> list:
+        """método para devolver la lista de archivos dentro de la carpeta devices
+
+        :return: retorna una lista de archivos
+        :rtype: list
+        """
         files: list[str] = os.listdir("devices/")
         file_list: list = []
         for file in files:
@@ -32,8 +40,14 @@ class Report():
                 file_list.append(file)
         return file_list
 
-    # método para leer y listar el contenido de los archivos .log
     def read_file(self, file_list: str) -> list:
+        """método para leer y listar el contenido de los archivos .log
+
+        :param file_list: Lista de archivos
+        :type file_list: str
+        :return: retorna la lectura de los datos en una lista de Json
+        :rtype: list
+        """
         missions_data: list = []
         discarded_files: list = []
         for element in file_list:
@@ -47,8 +61,12 @@ class Report():
                     print(f'Ha ocurrido un error inesperado {e}')
         return missions_data
     
-    # Método para buscar el número de la última ejecución y devolver el nombre de la proxima carpeta execution
     def search_execution (self) -> str:
+        """Método para buscar el número de la última ejecución y devolver el nombre de la proxima carpeta execution
+
+        :return: retorna el nombre de la carpeta correspondiente al ciclo de ejecución dentro de backup
+        :rtype: str
+        """
         try:
             if os.path.exists(os.path.join("backup/")):
                 list_dir = os.listdir(os.path.join("backup/"))
@@ -63,8 +81,13 @@ class Report():
         except Exception as e:
             return(f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta backup {e}")
     
-    # Se debe mejorar con el fin de que se cree una carpeta del ciclo de ejecución con base en la última existente
+    
     def verify_backup(self) -> bool:
+        """Verifica la existencia y creacion de la carpeta backup
+
+        :return: retorna un bool indicando la existencia de la carpeta
+        :rtype: bool
+        """
         print("entro a verify backup")
         try:
             if not os.path.exists("backup/"):
@@ -80,6 +103,11 @@ class Report():
     # Método para mover los archivos al backup
     # Se debe mejorar para que se guarden en la carpeta del ciclo indicado
     def move_to_backup(self, list_files: list) -> None:
+        """Este metodo realiza el desplazamientos de los archivos al backup
+
+        :param list_files: contiene la lista de archivos
+        :type list_files: list
+        """
         if self.verify_backup():
             next_dir = self.search_execution()
             os.mkdir("backup/"+next_dir)
@@ -90,13 +118,27 @@ class Report():
                 except Exception as e:
                     print(f"No fue posible mover el archivo {file} motivo {e}")
 
-    # Método para generar el reporte de análisis de eventos
+    
     def event_analysis(self, mission_data: list) -> pd.DataFrame:
+        """Método para generar el reporte de análisis de eventos
+
+        :param mission_data: Lista de los datos leidos de cada archivo
+        :type mission_data: list
+        :return: retorna un dataframe con el análisis de eventos
+        :rtype: pd.DataFrame
+        """
         df: pd.DataFrame = pd.DataFrame(mission_data)
         data: pd.DataFrame = df.groupby(['mission', 'device_type', 'device_status']).size().reset_index(name='count')
         return data
-    # Método para generar el reporte consolidación de misiones
+    
     def killed_devices(self, mission_data: list) -> pd.DataFrame:
+        """Método para generar el reporte consolidación de misiones
+        
+        :param mission_data: Lista de los datos leidos de cada archivo
+        :type mission_data: list
+        :return: retorna un dataframe con el análisis de los dispositivos inoperables
+        :rtype: pd.DataFrame
+        """
         try:
             df: pd.DataFrame = pd.DataFrame(mission_data)
             # filtra las filas donde el estado es 'killed'
@@ -111,6 +153,14 @@ class Report():
             return data
 
     def percentage_calculation(self, mission_data: list) -> pd.DataFrame:
+        """Este metodo permite calcular el porcentaje de los datos generados para cada disposivo y mision 
+        con respecto a la cantidad total de datos
+
+        :param mission_data: Lista de los datos leidos de cada archivo
+        :type mission_data: list
+        :return: retorna un dataframe con el porcentaje sobre la cantidad de datos en cada archivo
+        :rtype: pd.DataFrame
+        """
         try:
             df: pd.DataFrame = pd.DataFrame(mission_data)
             total_data: int = len(df)
@@ -124,6 +174,7 @@ class Report():
             return grouped_data
     
     def create_report(self, data_prueba: list) -> None:
+        
         fecha = datetime.now().strftime("%d%m%y%H%M%S")
         file_name = f'APLSTATS-{1}-{fecha}.log'
         with open(file_name, 'a') as file:
