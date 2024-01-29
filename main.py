@@ -45,6 +45,7 @@ def main_menu(opcion: int, rp: Report) -> None:
                 logging.warning("No se encontraron archivos que cumplan con las condiciones especificadas.")
     elif opcion == 3:
         editor: ParametersEditor = ParametersEditor()
+        editor.print_parameters()
         editor.run()
     elif opcion == 4:
         editor: ParametersEditor = ParametersEditor()

@@ -1,22 +1,43 @@
+from typing import Dict, List, Union
 import json
 
+
 class ParametersEditor:
+    """
+    Clase para editar y gestionar parámetros almacenados en el archivo "parameters.json"
 
-    def __init__(self):
-        self.parameters = None
+    Atributos:
+    - parameters (Union[None, Dict[str, Union[int, List[int], List[str]]]]):
+        Almacena los parámetros cargados desde el archivo JSON.
+    """
 
-    def run(self):
+    def __init__(self) -> None:
+        """
+        Inicializa la instancia de ParametersEditor.
+        """
+
+        self.parameters: Union[None, Dict[str, Union[int, List[int], List[str]]]] = None
+
+    def run(self) -> None:
+        """
+        Ejecuta el flujo para cargar, mostrar opciones, editar y guardar parámetros.
+        """
         self.load_parameters()
         self.show_options()
         self.edit_parameters()
         self.save_parameters()
 
-    def load_parameters(self):
+    def load_parameters(self) -> None:
+        """
+        Carga los parámetros desde el archivo "parameters.json".
+        """
         with open("parameters.json") as f:
             self.parameters = json.load(f)
-        
 
-    def show_options(self):
+    def show_options(self) -> None:
+        """
+        Muestra las opciones disponibles para editar los parametros.
+        """
         print("Elige la variable que quieres editar:")
         print("1) file_min")
         print("2) interval_seconds")
@@ -25,9 +46,12 @@ class ParametersEditor:
         print("5) device_types")
         print("6) missions")
 
-    def edit_parameters(self):
-        option: int = int(input("¿Que quieres editar? : "))
-        value: str = input("Nuevo valor: ")
+    def edit_parameters(self) -> None:
+        """
+        Edita los parámetros según la opción seleccionada por el usuario.
+        """
+        option: int = int(input("¿Qué quieres editar? : "))
+        value: Union[int, str, List[str]] = input("Nuevo valor: ")
 
         if option == 1:
             self.parameters["file_min"] = int(value)
@@ -42,15 +66,20 @@ class ParametersEditor:
         elif option == 6:
             self.parameters["missions"] = value.split(",")
 
-    def save_parameters(self):
+    def save_parameters(self) -> None:
+        """
+        Guarda los parámetros modificados en el archivo "parameters.json".
+        """
         with open("parameters.json", "w") as f:
             json.dump(self.parameters, f)
 
-    def print_parameters(self):
+    def print_parameters(self) -> None:
+        """
+        Imprime en la consola los parámetros actuales del archivo "parameters.json".
+        """
         if self.parameters is None:
-            self.load_parameters()  # Carga los parámetros si aún no se han cargado
+            self.load_parameters()
 
         print("Los parámetros actuales son:")
         for key, value in self.parameters.items():
             print(f"{key}: {value}")
-
