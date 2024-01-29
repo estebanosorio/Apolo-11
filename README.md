@@ -12,29 +12,25 @@ Este archivo contiene el programa principal que interactúa con el usuario a tra
 
 El módulo `file_generator` contiene la clase `FileGenerator`, que se encarga de generar archivos de log con información aleatoria. También incluye funciones para crear carpetas, generar nombres de archivos únicos y crear el contenido de los archivos.
 
-## Otros Archivos
-
 ### `report.py`
 
-Este archivo define la clase `Report` que se utiliza para realizar operaciones relacionadas con la generación de informes. Incluye funciones para verificar dispositivos, obtener listas de archivos y leer archivos.
-
-### `parameters_editor.py`
-
-El archivo `parameters_editor.py` contiene la clase `ParametersEditor`, que se utiliza para editar y manipular los parámetros del sistema.
+Contiene la clase Report que realiza el análisis de eventos, generación de informes consolidados y cálculos de porcentajes sobre los datos de los archivos de log generados.
 
 ### `generate_hash.py`
 
-El módulo `generate_hash` proporciona la clase `Hash` que se utiliza para generar hash a partir de la información de los archivos.
+Implementa la generación de un hash utilizando la biblioteca hashlib para garantizar la integridad de los datos en los archivos generados.
+
+## Archivos de Configuración
+
+### `parameters.json`
+
+Este archivo contiene los parámetros de configuración del sistema, como el rango de archivos a generar, el intervalo de tiempo entre generaciones, las misiones disponibles, tipos de dispositivos y estados de dispositivos.
 
 ## Instrucciones de Ejecución
 
 1. Asegúrate de tener Python instalado en tu sistema.
 2. Ejecuta `main.py` para iniciar el programa.
 3. Selecciona la opción correspondiente en el menú para realizar las operaciones deseadas.
-
-## Configuración
-
-La configuración del sistema se realiza a través del archivo `parameters.json`. Este archivo incluye información sobre misiones, tipos de dispositivos, estados de dispositivos y parámetros de generación de archivos.
 
 ## Dependencias
 

@@ -100,7 +100,6 @@ class FileGenerator:
 
         with open(file_path, "w") as file:
             file.write(json.dumps(file_content, indent=4))
-        logging.info(f"Archivo '{mission}' creado en {datetime.now().strftime('%H:%M:%S')}")
 
     def generate_files(self, num_files: int) -> None:
         """
@@ -109,12 +108,9 @@ class FileGenerator:
         Args:
             num_files (int): Número de archivos para generar.
         """
-        try:
-            for _ in range(num_files):
+        for _ in range(num_files):
                 mission: str = random.choice(self.missions)
                 self.generate_file(mission)
-        except Exception as e:
-            logging.error(f"Error durante la generación de archivos: {str(e)}")
 
     def run_file_generation(self) -> None:
         """
@@ -124,23 +120,24 @@ class FileGenerator:
         Raises:
             Exception: Se produce un error durante la ejecución del script.
         """
+        with open("parameters.json", "r") as parameters:
+            parameter: Dict[str, int] = json.load(parameters)
+
+        num_files: int = random.randint(parameter["file_min"], parameter["file_max"])
+    
+        interval_seconds: int = parameter["interval_seconds"]
+
+        print("El numero de archivos a generar es:", num_files)
+        print("el tiempo intervalo para la sigueinte creacion es:",interval_seconds)
+
+
         try:
-            with open("parameters.json", "r") as parameters_file:
-                parameter: Dict[str, int] = json.load(parameters_file)
-
-            num_files: int = random.randint(parameter["file_min"], parameter["file_max"])
-            interval_seconds: int = parameter["interval_seconds"]
-
-            logging.info(f"Número de archivos a generar: {num_files}")
-            logging.info(f"Tiempo intervalo para la siguiente creación: {interval_seconds} segundos")
-
             while True:
                 self.generate_files(num_files)
-                logging.info(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
+                print(f"Archivos creados en {datetime.now().strftime('%H:%M:%S')}")
                 time.sleep(interval_seconds)
                 num_files: int = random.randint(parameter["file_min"], parameter["file_max"])
-                logging.info(f"Número de archivos a generar: {num_files}")
-                logging.info(f"Tiempo de intervalo para la siguiente creación: {interval_seconds} segundos")
-
-        except Exception as e:
-            logging.error(f"Error durante la ejecución del script: {str(e)}")
+                print("El número de archivos a generar es:", num_files)
+                print("El tiempo de intervalo para la siguiente creación es:", interval_seconds)
+        except:
+            print("\nTermino el tiempo de creacion de archivos")
