@@ -84,7 +84,7 @@ class Report():
             return(f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta backup {e}")
     
     def search_report (self) -> int:
-      """Método para buscar el número del último reporte y retornar el número del nuevo reporte que se debe generar
+        """Método para buscar el número del último reporte y retornar el número del nuevo reporte que se debe generar
 
         :return: retorna el número con el que se debe genrar el reporte consolidad de las misiones
         :rtype: int
