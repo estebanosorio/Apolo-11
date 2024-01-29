@@ -8,13 +8,14 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+
 class Report():
     def __init__(self) -> None:
         pass
 
     def verify_devices(self) -> bool:
         """método para verificar que exista la carpeta devices
-        
+
         :return: retorna la confirmación de la existencia de la carpeta devices
         :rtype: bool
         """
@@ -62,8 +63,8 @@ class Report():
                     discarded_files.append(preview)
                     logging.warn(f'Ha ocurrido un error inesperado {e}')
         return missions_data
-    
-    def search_execution (self) -> str:
+
+    def search_execution(self) -> str:
         """Método para buscar el número de la última ejecución y devolver el nombre de la proxima carpeta execution
 
         :return: retorna el nombre de la carpeta correspondiente al ciclo de ejecución dentro de backup
@@ -73,17 +74,18 @@ class Report():
             if os.path.exists(os.path.join("backup/")):
                 list_dir = os.listdir(os.path.join("backup/"))
                 list_aux: list = []
-                if list_dir != []:
+                if list_dir:
                     for item in list_dir:
                         list_aux.append(int(item.split("_")[1]))
                     list_aux.sort()
-                    return("execution_"+str(list_aux[-1]+1))
+                    return "execution_" + str(list_aux[-1] + 1)
                 else:
-                    return("execution_1")
+                    return "execution_1"
         except Exception as e:
-            return(f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta backup {e}")
-    
-    def search_report (self) -> int:
+            return f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta backup {e}"
+        return "o"
+
+    def search_report(self) -> int:
         """Método para buscar el número del último reporte y retornar el número del nuevo reporte que se debe generar
 
         :return: retorna el número con el que se debe genrar el reporte consolidad de las misiones
@@ -96,13 +98,14 @@ class Report():
                 for item in list_dir:
                     list_aux.append(int(item.split("-")[1]))
                 logging.info(list_aux.sort())
-                return(int(list_aux[-1]+1))
+                return (int(list_aux[-1] + 1))
             else:
                 logging.info(1)
-                return(1)
+                return 1
         except Exception as e:
-            return(f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta report {e}")
-    
+            logging.warn(f"Ha ocurrido un error leyendo los ficheros dentro de la carpeta report {e}")
+            return 0
+
     def verify_backup(self) -> bool:
         """Verifica la existencia y creacion de la carpeta backup
 
@@ -114,7 +117,7 @@ class Report():
             if not os.path.exists("backup/"):
                 os.mkdir("backup")
             logging.debug("debio crear backup")
-            return True   
+            return True
         except Exception as e:
             logging.warn(f'Ha ocurrido un error inesperado {e}')
             return False
@@ -135,7 +138,6 @@ class Report():
                 except Exception as e:
                     logging.warn(f"No fue posible mover el archivo {file} motivo {e}")
 
-    
     def event_analysis(self, mission_data: list) -> pd.DataFrame:
         """Método para generar el reporte de análisis de eventos
 
@@ -150,7 +152,7 @@ class Report():
 
     def killed_devices(self, mission_data: list) -> pd.DataFrame:
         """Método para generar el reporte consolidación de misiones
-        
+
         :param mission_data: Lista de los datos leidos de cada archivo
         :type mission_data: list
         :return: retorna un dataframe con el análisis de los dispositivos inoperables
@@ -163,14 +165,14 @@ class Report():
             # agrupa por misión y cuenta la cantidad de dispositivos 'killed'
             data: pd.DataFrame = devices.groupby('mission')['device_status'].count().reset_index(name='killed_devices_count')
             return data
-        
+
         except Exception as e:
             data = pd.DataFrame()
             logging.warn(f"Ha ocurrido un error al realizar el reporte de dispositivos inoperables {e}")
             return data
 
     def percentage_calculation(self, mission_data: list) -> pd.DataFrame:
-        """Este metodo permite calcular el porcentaje de los datos generados para cada disposivo y mision 
+        """Este metodo permite calcular el porcentaje de los datos generados para cada disposivo y mision
         con respecto a la cantidad total de datos
 
         :param mission_data: Lista de los datos leidos de cada archivo
@@ -189,9 +191,9 @@ class Report():
             grouped_data = pd.DataFrame()
             logging.warn(f"Ha ocurrido un error al realizar el reporte de dispositivos inoperables {e}")
             return grouped_data
-    
+
     def create_report(self, data_prueba: list) -> None:
-        """Este metodo consolida la información de los DataFrame que retornan los métodos para la creación 
+        """Este metodo consolida la información de los DataFrame que retornan los métodos para la creación
         y generación del reporte
 
         :param data_prueba: Lista de los datos leidos de cada archivo
@@ -199,12 +201,12 @@ class Report():
         """
         fecha = datetime.now().strftime("%d%m%y%H%M%S")
         if not os.path.exists("report/"):
-                os.mkdir("report")
+            os.mkdir("report")
         file_number = self.search_report()
         logging.debug(f"file_number = {file_number}")
         file_name = f'APLSTATS-{file_number}-{fecha}.log'
         logging.debug(f"file_name = {file_name}")
-        
+
         with open("report/"+file_name, 'a') as file:
             event_analysis = self.event_analysis(data_prueba)
             killed_devices = self.killed_devices(data_prueba)
