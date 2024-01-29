@@ -25,12 +25,14 @@ while seguir:
     if (opcion == 2):
         if rp.verify_devices():
                 file_list = rp.get_file_list()
-                mission_data = rp.read_file(file_list)
-                rp.create_report(mission_data)
-                rp.move_to_backup(mission_data)        
+                if file_list != []:
+                    mission_data = rp.read_file(file_list)
+                    rp.create_report(mission_data)
+                    rp.move_to_backup(file_list)
+                else: 
+                    print(f"No se encontraron archivos que cumplan con las condiciones especificadas")
     if (opcion == 3):
         print("Adiós")
         seguir = False
-
     else: 
         print("Opcion Invalida")
