@@ -48,6 +48,4 @@ El proyecto utiliza las siguientes dependencias externas:
 ## Notas Adicionales
 
 - Se recomienda revisar y ajustar los parámetros en `parameters.json` según sea necesario.
-- Si encuentras algún problema, consulta los registros de eventos en el archivo `log.txt` para obtener más información.
 
-¡Disfruta utilizando el sistema de generación de archivos y reportes!
