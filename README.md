@@ -20,6 +20,10 @@ Contiene la clase Report que realiza el análisis de eventos, generación de inf
 
 Implementa la generación de un hash utilizando la biblioteca hashlib para garantizar la integridad de los datos en los archivos generados.
 
+### `generateparameters_editor.py`
+
+Este archivo define una clase (`ParametersEditor`) que permite al usuario editar los parámetros del sistema. Los parámetros se cargan desde un archivo JSON llamado 'parameters.json', y el usuario puede editar valores como el número mínimo y máximo de archivos a generar, el intervalo de tiempo, tipos de dispositivos, estados de dispositivos, y misiones.
+
 ## Archivos de Configuración
 
 ### `parameters.json`
