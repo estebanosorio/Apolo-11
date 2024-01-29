@@ -4,10 +4,12 @@ from typing import Any
 
 logging.basicConfig(level=logging.WARN)
 
+
 class Hash():
-    def generate_hash(self, current_date:str, mission:str, device_type:str, device_status:str) -> str:
-        # Concatenar la información
-        """Esta función toma unos argumentos de tipo str y los concatena, luego los vuelve hexadecimales y lo convierte en un valor hash
+    def generate_hash(self, current_date: str, mission: str, device_type: str, device_status: str) -> str:
+        """Esta función toma argumentos de tipo str y los concatena,
+        luego los vuelve hexadecimales y lo convierte en un valor hash
+
         Args:
             current_date (str): Fecha
             mission (str): Mision
