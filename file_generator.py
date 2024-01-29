@@ -51,7 +51,8 @@ class FileGenerator:
         file_path: str = os.path.join(self.base_path, "devices", file_name)
 
         with open(file_path, "w") as file:
-            file.write(str(file_content))
+            # file.write(str(file_content))
+            file.write(json.dumps(file_content, indent=4))
 
     def generate_files(self, num_files: int) -> None:
         for _ in range(num_files):

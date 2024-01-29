@@ -1,15 +1,19 @@
-import file_generator 
+import file_generator
 from report import Report
+from parameters_editor import ParametersEditor
 
 
 def mostrar_menu() -> None:
-    '''
+    """
     Muestra el menu de opciones al usuario
-    '''
+    """
     print("Elige una opción:")
     print("1) Generar archivos ")
     print("2) Generar Reporte")
-    print("3) Salir")
+    print("3) Editar Parametros")
+    print("4) Imprimir Parametros")
+    print("5) Salir")
+
 
 seguir = True
 rp = Report()
@@ -31,8 +35,18 @@ while seguir:
                     rp.move_to_backup(file_list)
                 else: 
                     print(f"No se encontraron archivos que cumplan con las condiciones especificadas")
+                    
     if (opcion == 3):
-        print("Adiós")
+        editor = ParametersEditor()
+        editor.run()
+
+    if (opcion == 4):
+        editor = ParametersEditor()
+        editor.load_parameters()  # Carga los parámetros antes de imprimirlos
+        editor.print_parameters()
+
+    if (opcion == 5):
         seguir = False
     else: 
         print("Opcion Invalida")
+
